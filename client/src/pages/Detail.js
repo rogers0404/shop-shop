@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useQuery } from '@apollo/react-hooks';
+import store from '../utils/store';
 
 import Cart from "../components/Cart";
-import { useStoreContext } from "../utils/GlobalState";
+/* import { useStoreContext } from "../utils/GlobalState"; */
 import {
   REMOVE_FROM_CART,
   UPDATE_CART_QUANTITY,
@@ -15,23 +16,30 @@ import { idbPromise } from "../utils/helpers";
 import spinner from '../assets/spinner.gif'
 
 function Detail() {
-  const [state, dispatch] = useStoreContext();
+/*   const [state, dispatch] = useStoreContext(); */
   const { id } = useParams();
 
-  const [currentProduct, setCurrentProduct] = useState({});
+/*   const [currentProduct, setCurrentProduct] = useState({}); */
 
   const { loading, data } = useQuery(QUERY_PRODUCTS);
 
-  const { products, cart } = state;
+  /* const { products, cart } = state; */
+  const { products, cart } = store.getState();
 
+  const currentProduct = products.find(product => product._id === id) || {};
+  
   useEffect(() => {
     // already in global store
-    if (products.length) {
-      setCurrentProduct(products.find(product => product._id === id));
-    } 
+    /* if (products.length) {
+
+      /* setCurrentProduct(products.find(product => product._id === id)); 
+      currentProduct = products.find(product => product._id === id);
+    }  */
+    // 
+    /* else */
     // retrieved from server
-    else if (data) {
-      dispatch({
+    if (data) {
+      store.dispatch({
         type: UPDATE_PRODUCTS,
         products: data.products
       });
@@ -43,18 +51,18 @@ function Detail() {
     // get cache from idb
     else if (!loading) {
       idbPromise('products', 'get').then((indexedProducts) => {
-        dispatch({
+        store.dispatch({
           type: UPDATE_PRODUCTS,
           products: indexedProducts
         });
       });
     }
-  }, [products, data, loading, dispatch, id]);
+  }, [products, data, loading, id]);
 
   const addToCart = () => {
     const itemInCart = cart.find((cartItem) => cartItem._id === id)
     if (itemInCart) {
-      dispatch({
+      store.dispatch({
         type: UPDATE_CART_QUANTITY,
         _id: id,
         purchaseQuantity: parseInt(itemInCart.purchaseQuantity) + 1
@@ -64,7 +72,7 @@ function Detail() {
         purchaseQuantity: parseInt(itemInCart.purchaseQuantity) + 1
       });
     } else {
-      dispatch({
+      store.dispatch({
         type: ADD_TO_CART,
         product: { ...currentProduct, purchaseQuantity: 1 }
       });
@@ -74,7 +82,7 @@ function Detail() {
   }
 
   const removeFromCart = () => {
-    dispatch({
+    store.dispatch({
       type: REMOVE_FROM_CART,
       _id: currentProduct._id
     });
