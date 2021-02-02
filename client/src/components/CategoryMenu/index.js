@@ -14,7 +14,7 @@ function CategoryMenu() {
 
   const { loading, data: categoryData } = useQuery(QUERY_CATEGORIES);
 
-  useEffect(() => {
+  /* useEffect(() => { */
     if (categoryData) {
       store.dispatch({
         type: UPDATE_CATEGORIES,
@@ -31,12 +31,12 @@ function CategoryMenu() {
         });
       });
     }
-  }, [categoryData, loading]);
+ /*  }, [categoryData, loading]); */
 
   const handleClick = id => {
     store.dispatch({
-      type: UPDATE_CURRENT_CATEGORY,
-      currentCategory: id
+      type: UPDATE_CURRENT_CATEGORY/* ,
+      currentCategory: id */
     });
   };
 

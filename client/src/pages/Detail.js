@@ -28,7 +28,7 @@ function Detail() {
 
   const currentProduct = products.find(product => product._id === id) || {};
   
-  useEffect(() => {
+  /* useEffect(() => { */
     // already in global store
     /* if (products.length) {
 
@@ -57,7 +57,7 @@ function Detail() {
         });
       });
     }
-  }, [products, data, loading, id]);
+  /*} , [products, data, loading, id]); */
 
   const addToCart = () => {
     const itemInCart = cart.find((cartItem) => cartItem._id === id)

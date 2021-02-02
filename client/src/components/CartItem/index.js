@@ -14,6 +14,7 @@ const CartItem = ({ item }) => {
       type: REMOVE_FROM_CART,
       _id: item._id
     });
+    store.getState();
     idbPromise('cart', 'delete', { ...item });
 
   };
@@ -21,18 +22,20 @@ const CartItem = ({ item }) => {
   const onChange = (e) => {
     const value = e.target.value;
     if (value === '0') {
-      state.dispatch({
+      store.dispatch({
         type: REMOVE_FROM_CART,
         _id: item._id
       });
+      store.getState();
       idbPromise('cart', 'delete', { ...item });
 
     } else {
-      state.dispatch({
+      store.dispatch({
         type: UPDATE_CART_QUANTITY,
         _id: item._id,
         purchaseQuantity: parseInt(value)
       });
+      store.getState();
       idbPromise('cart', 'put', { ...item, purchaseQuantity: parseInt(value) });
 
     }

@@ -15,7 +15,7 @@ function ProductList() {
 
   const { loading, data } = useQuery(QUERY_PRODUCTS);
 
-  useEffect(() => {
+  /* useEffect(() => { */
     if(data) {
       store.dispatch({
            type: UPDATE_PRODUCTS,
@@ -32,7 +32,7 @@ function ProductList() {
        });
       });
     }
-  }, [data, loading]);
+  /* }, [data, loading]); */
 
   function filterProducts() {
     if (!currentCategory) {
